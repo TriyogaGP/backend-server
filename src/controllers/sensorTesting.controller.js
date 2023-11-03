@@ -423,11 +423,11 @@ function postPanelSurya (models, io) {
   return async (req, res, next) => {
 		let { tegangan, arus, daya, kwh } = req.query
     try {
-			io.emit("panelsurya", { tegangan: parseFloat(tegangan), arus: parseFloat(arus), daya: parseFloat(daya), kwh: parseFloat(kwh) });
+			io.emit("panelsurya", { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh });
 			await models.PanelSurya.update({
 				tegangan, arus, daya, kwh
 			}, { where: { idSensor: 1 } })
-			return OK(res, { tegangan: parseFloat(tegangan), arus: parseFloat(arus), daya: parseFloat(daya), kwh: parseFloat(kwh) })
+			return OK(res, { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh })
     } catch (err) {
 			return NOT_FOUND(res, err.message)
     }

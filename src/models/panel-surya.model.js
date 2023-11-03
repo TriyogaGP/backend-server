@@ -12,22 +12,22 @@ const PanelSuryaScheme = Sequelize => {
       field: 'id_sensor'
     },
     tegangan: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING(10),
       allowNull: false,
       field: 'tegangan',
     },
     arus: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING(10),
       allowNull: false,
       field: 'arus',
     },
     daya: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING(10),
       allowNull: false,
       field: 'daya',
     },
     kwh: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING(10),
       allowNull: false,
       field: 'kwh',
     },
