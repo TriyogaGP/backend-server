@@ -6,9 +6,11 @@ const {
   getJadwalSholat,
   getTanamanAriq,
   postTanamanAriq,
+  postServerPengadian,
+  postPanelSurya,
 } = require('../controllers/sensorTesting.controller')
 
-module.exports = models => {
+module.exports = (models, io) => {
   const route = Router();
 
   route.route('/testing')
@@ -22,5 +24,10 @@ module.exports = models => {
   route.route('/post-ariq-tanaman')
     .get(postTanamanAriq(models))
     
+  route.route('/pengabdian')
+    .get(postServerPengadian(models))
+  route.route('/panelsurya')
+    .get(postPanelSurya(models, io))
+
   return route;
 }

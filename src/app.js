@@ -44,9 +44,30 @@ try {
     res.json({ message: "Welcome to Backend Server." });
   });
   //api
-  app.use('/api/v1/sensor-testing', sensorTesting(models));
+  app.use('/api/v1/sensor-testing', sensorTesting(models, io));
   
   app.use(swagger());
+
+  const {
+    getDataPanelSurya,
+  } = require("./utils/socketIO-utils");
+
+  // SocketIO
+  io.on("connection", (socket) => {
+    // console.log('A user is connected');
+
+    socket.on("panelsurya-pesan", (msg) => {
+      console.log(msg);
+    });
+
+    socket.on('message', (message) => {
+      console.log(`message from ${socket.id} : ${message}`);
+    })
+
+    socket.on('disconnect', () => {
+      console.log(`socket ${socket.id} disconnected`);
+    })
+  });
 
   // //cron job
   //   const { cronTransaksi, cronTransaksiDaily, cronUserActive } = require('./utils/cron.utils')

@@ -405,10 +405,41 @@ function getTanamanAriq (models) {
 	}  
 }
 
+function postServerPengadian (models) {
+  return async (req, res, next) => {
+		let { kategori, bpm, suhu } = req.query
+    try {
+			await models.Pengabdian.update({
+				suhu, bpm
+			}, { where: { kategori } })
+			return OK(res, { bpm: parseInt(bpm), suhu: parseFloat(suhu) })
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
+function postPanelSurya (models, io) {
+  return async (req, res, next) => {
+		let { tegangan, arus, daya, kwh } = req.query
+    try {
+			io.emit("panelsurya", { tegangan: parseFloat(tegangan), arus: parseFloat(arus), daya: parseFloat(daya), kwh: parseFloat(kwh) });
+			await models.PanelSurya.update({
+				tegangan, arus, daya, kwh
+			}, { where: { idSensor: 1 } })
+			return OK(res, { tegangan: parseFloat(tegangan), arus: parseFloat(arus), daya: parseFloat(daya), kwh: parseFloat(kwh) })
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
 	getJadwalSholat,
 	postTanamanAriq,
 	getTanamanAriq,
+	postServerPengadian,
+	postPanelSurya,
 }
