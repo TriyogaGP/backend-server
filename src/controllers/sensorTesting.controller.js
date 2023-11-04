@@ -421,13 +421,13 @@ function postServerPengadian (models) {
 
 function postPanelSurya (models, io) {
   return async (req, res, next) => {
-		let { tegangan, arus, daya, kwh } = req.query
+		let { tegangan, arus, daya, kwh, suhu } = req.query
     try {
-			io.emit("panelsurya", { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh });
+			io.emit("panelsurya", { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh, suhu: suhu });
 			await models.PanelSurya.update({
-				tegangan, arus, daya, kwh
+				tegangan, arus, daya, kwh, suhu
 			}, { where: { idSensor: 1 } })
-			return OK(res, { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh })
+			return OK(res, { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh, suhu: suhu })
     } catch (err) {
 			return NOT_FOUND(res, err.message)
     }

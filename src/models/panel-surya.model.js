@@ -31,6 +31,11 @@ const PanelSuryaScheme = Sequelize => {
       allowNull: false,
       field: 'kwh',
     },
+    suhu: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      field: 'suhu',
+    },
   };
 };
 
