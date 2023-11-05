@@ -423,7 +423,27 @@ function postPanelSurya (models, io) {
   return async (req, res, next) => {
 		let { tegangan, arus, daya, kwh, suhu } = req.query
     try {
+			let date = new Date();
 			io.emit("panelsurya", { tegangan: tegangan, arus: arus, daya: daya, kwh: kwh, suhu: suhu });
+			const data = await request({
+				url: `https://api.thingspeak.com/update.json`,
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				data: {
+					"api_key": "AOX26G16CDZCGWYJ",
+					"created_at": date,
+					"field1": tegangan,
+					"field2": arus,
+					"field3": daya,
+					"field4": kwh,
+					"field5": suhu,
+					"latitude": "",
+					"longitude": "",
+					"status": "Please check in!"
+				}
+			})
 			await models.PanelSurya.update({
 				tegangan, arus, daya, kwh, suhu
 			}, { where: { idSensor: 1 } })
