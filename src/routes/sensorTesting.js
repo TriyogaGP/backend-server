@@ -8,6 +8,8 @@ const {
   postTanamanAriq,
   postServerPengadian,
   postPanelSurya,
+  getWimon,
+  postWimon,
 } = require('../controllers/sensorTesting.controller')
 
 module.exports = (models, io) => {
@@ -28,6 +30,9 @@ module.exports = (models, io) => {
     .get(postServerPengadian(models))
   route.route('/panelsurya')
     .get(postPanelSurya(models, io))
+  route.route('/wimon')
+    .post(postWimon(models, io))
+    .get(getWimon(models))
 
   return route;
 }

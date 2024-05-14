@@ -7,7 +7,7 @@ const config = {
   HOST: process.env.DB_HOST || "localhost",
   USER: process.env.DB_USER || "userrootwin",
   PASSWORD: process.env.DB_PASSWORD || "userrootwin",
-  DB: process.env.DB_NAME || "db_gatsa_web",
+  DB: process.env.DB_NAME || "db_server",
   PORT: process.env.DB_PORT || 3306,
 }
 

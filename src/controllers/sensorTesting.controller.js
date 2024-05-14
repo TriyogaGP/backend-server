@@ -7,8 +7,9 @@ const {
 const {
 	encrypt,
 	decrypt,
-	buildMysqlResponseWithPagination
+	buildMysqlResponseWithPagination,
 } = require('../utils/helper.utils');
+const haversine = require("haversine-distance");
 const { Op } = require('sequelize')
 const sequelize = require('sequelize')
 const bcrypt = require('bcrypt');
@@ -454,6 +455,83 @@ function postPanelSurya (models, io) {
   }  
 }
 
+function getWimon (models) {
+  return async (req, res, next) => {
+		try {
+			const dataBatasan = await models.WimonBatasan.findOne({ where:{ idTitik: 1 } });
+			return OK(res, dataBatasan)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
+function postWimon (models, io) {
+  return async (req, res, next) => {
+		let { alat = 'satu', idSensor, suhuSatu, humiditySatu, suhuDua, humidityDua, pulseHeart, mq135, longitude, latitude } = req.body
+    try {
+			// let date = new Date();
+			// const data = await request({
+			// 	url: `https://api.thingspeak.com/update.json`,
+			// 	method: 'POST',
+			// 	headers: {
+			// 		"Content-Type": "application/json"
+			// 	},
+			// 	data: {
+			// 		"api_key": "AOX26G16CDZCGWYJ",
+			// 		"created_at": date,
+			// 		"field1": tegangan,
+			// 		"field2": arus,
+			// 		"field3": daya,
+			// 		"field4": kwh,
+			// 		"field5": suhu,
+			// 		"latitude": "",
+			// 		"longitude": "",
+			// 		"status": "Please check in!"
+			// 	}
+			// })
+
+			if(alat === 'satu'){
+				await models.WimonTitik.update({
+					suhu: suhuSatu, humidity: humiditySatu, longitude, latitude
+				}, { where: { idSensor } })
+			}else if(alat === 'dua'){
+				await models.WimonKandang.update({
+					suhu: suhuDua, humidity: humidityDua, pulseHeart, mq135
+				}, { where: { idSensor: 1 } })
+			}
+
+			const dataBatasan = await models.WimonBatasan.findOne({ where:{ idTitik: 1 } });
+			const dataKandang = await models.WimonKandang.findOne({ attributes: ["suhu", "humidity", "pulseHeart", "mq135"], where:{ idSensor: 1 } });
+			const point1 = {
+				lat: parseFloat(dataBatasan.latitude),
+				lng: parseFloat(dataBatasan.longitude)
+			}
+			const dataTitik = await models.WimonTitik.findAll();
+			const result = [];
+			await Promise.all(dataTitik.map(async str => {
+				const point2 = {
+					lat: parseFloat(str.latitude),
+					lng: parseFloat(str.longitude)
+				}
+				const jarak = haversine(point1, point2);
+				result.push({
+					...str.dataValues,
+					jarak: parseFloat(jarak.toFixed(1)),
+					alert: parseFloat(jarak.toFixed(1)) >= dataBatasan.batas ? true : false,
+					message: parseFloat(jarak.toFixed(1)) >= dataBatasan.batas ? "Hewan diluar jangkauan" : "Hewan didalam jangkauan",
+				});
+			}))
+
+			io.emit("titikhewan", { dataTitik: result, dataKandang: dataKandang});
+
+			return OK(res, { dataTitik: result, dataKandang: dataKandang})
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -462,4 +540,6 @@ module.exports = {
 	getTanamanAriq,
 	postServerPengadian,
 	postPanelSurya,
+	getWimon,
+	postWimon,
 }
