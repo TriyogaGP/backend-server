@@ -43,6 +43,20 @@ try {
   app.get("/", (req, res) => {
     res.json({ message: "Welcome to Backend Server." });
   });
+
+  //views ejs
+  app.get("/smart-cooler", async (req, res) => {
+    const dataSmartCooler = await models.SmartCooler.findOne({ where:{ idSensor: 1 } });
+    const hasil = {
+      tegangan: dataSmartCooler.tegangan,
+      suhu: dataSmartCooler.suhu,
+      humidity: dataSmartCooler.humidity
+    }
+    res.render('smart-cooler', {
+      data: hasil
+    })
+  });
+
   //api
   app.use('/api/v1/sensor-testing', sensorTesting(models, io));
   

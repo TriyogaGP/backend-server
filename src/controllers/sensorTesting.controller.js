@@ -532,6 +532,40 @@ function postWimon (models, io) {
   }  
 }
 
+function postSmartCooler (models, io) {
+  return async (req, res, next) => {
+		let { suhu, humidity, tegangan } = req.body
+    try {
+			let date = new Date();
+			const data = await request({
+				url: `https://api.thingspeak.com/update.json`,
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				data: {
+					"api_key": "2C3FNE6CWEUSB1GT",
+					"created_at": date,
+					"field1": tegangan,
+					"field2": suhu,
+					"field3": humidity,
+					"latitude": "",
+					"longitude": "",
+					"status": "Please check in!"
+				}
+			})
+
+			await models.SmartCooler.update({
+				suhu, humidity, tegangan
+			}, { where: { idSensor: 1 } })
+
+			return OK(res, { suhu, humidity, tegangan })
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -542,4 +576,5 @@ module.exports = {
 	postPanelSurya,
 	getWimon,
 	postWimon,
+	postSmartCooler,
 }
