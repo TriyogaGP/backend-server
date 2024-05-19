@@ -495,39 +495,37 @@ function postWimon (models, io) {
 				await models.WimonTitik.update({
 					suhu: suhuSatu, humidity: humiditySatu, longitude, latitude
 				}, { where: { idSensor } })
+
+				const dataBatasan = await models.WimonBatasan.findOne({ where:{ idTitik: 1 } });
+				const dataKandang = await models.WimonKandang.findOne({ attributes: ["suhu", "humidity", "pulseHeart", "mq135"], where:{ idSensor: 1 } });
+				const point1 = {
+					lat: parseFloat(dataBatasan.latitude),
+					lng: parseFloat(dataBatasan.longitude)
+				}
+				const dataTitik = await models.WimonTitik.findAll();
+				const result = [];
+				await Promise.all(dataTitik.map(async str => {
+					const point2 = {
+						lat: parseFloat(str.latitude),
+						lng: parseFloat(str.longitude)
+					}
+					const jarak = haversine(point1, point2);
+					result.push({
+						...str.dataValues,
+						jarak: parseFloat(jarak.toFixed(1)),
+						alert: parseFloat(jarak.toFixed(1)) >= dataBatasan.batas ? true : false,
+						message: parseFloat(jarak.toFixed(1)) >= dataBatasan.batas ? "Hewan diluar jangkauan" : "Hewan didalam jangkauan",
+					});
+				}))
+	
+				io.emit("titikhewan", { dataTitik: result, dataKandang: dataKandang});
+				return OK(res, { dataTitik: result, dataKandang: dataKandang})
 			}else if(alat === 'dua'){
 				await models.WimonKandang.update({
 					suhu: suhuDua, humidity: humidityDua, pulseHeart, mq135
 				}, { where: { idSensor: 1 } })
+				return OK(res)
 			}
-
-			const dataBatasan = await models.WimonBatasan.findOne({ where:{ idTitik: 1 } });
-			const dataKandang = await models.WimonKandang.findOne({ attributes: ["suhu", "humidity", "pulseHeart", "mq135"], where:{ idSensor: 1 } });
-			const point1 = {
-				lat: parseFloat(dataBatasan.latitude),
-				lng: parseFloat(dataBatasan.longitude)
-			}
-			const dataTitik = await models.WimonTitik.findAll();
-			const result = [];
-			await Promise.all(dataTitik.map(async str => {
-				const point2 = {
-					lat: parseFloat(str.latitude),
-					lng: parseFloat(str.longitude)
-				}
-				const jarak = haversine(point1, point2);
-				result.push({
-					...str.dataValues,
-					jarak: parseFloat(jarak.toFixed(1)),
-					alert: parseFloat(jarak.toFixed(1)) >= dataBatasan.batas ? true : false,
-					message: parseFloat(jarak.toFixed(1)) >= dataBatasan.batas ? "Hewan diluar jangkauan" : "Hewan didalam jangkauan",
-				});
-			}))
-
-			if(alat === 'satu'){
-				io.emit("titikhewan", { dataTitik: result, dataKandang: dataKandang});
-			}
-			
-			return OK(res, { dataTitik: result, dataKandang: dataKandang})
     } catch (err) {
 			return NOT_FOUND(res, err.message)
     }
