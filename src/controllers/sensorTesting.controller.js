@@ -523,8 +523,10 @@ function postWimon (models, io) {
 				});
 			}))
 
-			io.emit("titikhewan", { dataTitik: result, dataKandang: dataKandang});
-
+			if(alat === 'satu'){
+				io.emit("titikhewan", { dataTitik: result, dataKandang: dataKandang});
+			}
+			
 			return OK(res, { dataTitik: result, dataKandang: dataKandang})
     } catch (err) {
 			return NOT_FOUND(res, err.message)
