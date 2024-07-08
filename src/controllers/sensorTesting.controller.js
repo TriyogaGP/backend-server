@@ -566,6 +566,41 @@ function postSmartCooler (models, io) {
   }  
 }
 
+function postAlya (models, io) {
+  return async (req, res, next) => {
+		let { suhu, ph, tds } = req.body
+    try {
+			let date = new Date();
+			const data = await request({
+				url: `https://api.thingspeak.com/update.json`,
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				data: {
+					"api_key": "WXL31YFDLPAHXETO",
+					"created_at": date,
+					"field1": suhu,
+					"field2": ph,
+					"field3": tds,
+					"field4": "",
+					"field5": "",
+					"latitude": "",
+					"longitude": "",
+					"status": "Please check in!"
+				}
+			})
+
+			await models.AlyaHidroponik.update({
+				suhu, ph, tds
+			}, { where: { idSensor: 1 } })
+			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -577,4 +612,5 @@ module.exports = {
 	getWimon,
 	postWimon,
 	postSmartCooler,
+	postAlya,
 }

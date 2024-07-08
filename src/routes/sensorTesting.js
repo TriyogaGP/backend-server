@@ -11,6 +11,7 @@ const {
   getWimon,
   postWimon,
   postSmartCooler,
+  postAlya,
 } = require('../controllers/sensorTesting.controller')
 
 module.exports = (models, io) => {
@@ -36,6 +37,8 @@ module.exports = (models, io) => {
     .get(getWimon(models))
   route.route('/smart-cooler')
     .post(postSmartCooler(models))
+  route.route('/alya')
+    .post(postAlya(models))
 
   return route;
 }
