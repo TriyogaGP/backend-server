@@ -601,6 +601,38 @@ function postAlya (models, io) {
   }  
 }
 
+function getMonitoringPakanLele (models, io) {
+  return async (req, res, next) => {
+		let { suhu, ph, turbidity } = req.query
+    try {
+			let date = new Date();
+			await request({
+				url: `https://api.thingspeak.com/update.json`,
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				data: {
+					"api_key": "7B8FAO0N7A0TJRDS",
+					"created_at": date,
+					"field1": suhu,
+					"field2": ph,
+					"field3": turbidity,
+					"field4": "",
+					"field5": "",
+					"latitude": "",
+					"longitude": "",
+					"status": "Please check in!"
+				}
+			})
+
+			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -613,4 +645,5 @@ module.exports = {
 	postWimon,
 	postSmartCooler,
 	postAlya,
+	getMonitoringPakanLele,
 }
