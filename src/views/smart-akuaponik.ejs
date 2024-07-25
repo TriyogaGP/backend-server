@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="refresh" content="1">
+	<title>SMART COOLER</title>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+	<style>
+		.container {
+			display: flex;
+		}
+		.box {
+			flex: 1;
+			margin: 15px;
+			padding: 30px;
+			border: 3px solid black;
+			border-radius: 5px;
+		}
+		.titlebox{
+			font-size: 18pt;
+			text-align: center;
+			font-weight: bold;
+		}
+		.isibox{
+			font-size: 14pt;
+			text-align: center;
+			font-weight: bold;
+			margin-top: 20px;
+		}
+	</style>
+  <h1 align="center">MONITORING SMART AKUAPONIK</h1>
+	<div class="container">
+		<div class="box" style="background-color: blue;">
+			<div class="titlebox" style="color: white;">pH</div>
+			<div class="isibox" style="color: white;"><%= data.ph %> °C</div>
+		</div>
+		<div class="box" style="background-color: green;">
+			<div class="titlebox" style="color: white;">TDS (ppm)</div>
+			<div class="isibox" style="color: white;"><%= data.ttd %> %</div>
+		</div>
+	</div>
+</body>
+</html>

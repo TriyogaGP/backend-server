@@ -56,6 +56,16 @@ try {
       data: hasil
     })
   });
+  app.get("/smart-akuaponik", async (req, res) => {
+    const dataSandiSensor = await models.SandiSensor.findOne({ where:{ idSensor: 1 } });
+    const hasil = {
+      ph: dataSandiSensor.ph,
+      tds: dataSandiSensor.tds,
+    }
+    res.render('smart-akuaponik', {
+      data: hasil
+    })
+  });
 
   //api
   app.use('/api/v1/sensor-testing', sensorTesting(models, io));

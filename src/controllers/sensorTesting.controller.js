@@ -594,7 +594,18 @@ function postAlya (models, io) {
 			await models.AlyaHidroponik.update({
 				suhu, ph, tds
 			}, { where: { idSensor: 1 } })
-			return OK(res)
+			return OK(res, {
+				"api_key": "WXL31YFDLPAHXETO",
+				"created_at": date,
+				"field1": suhu,
+				"field2": ph,
+				"field3": tds,
+				"field4": "",
+				"field5": "",
+				"latitude": "",
+				"longitude": "",
+				"status": "Please check in!"
+			})
     } catch (err) {
 			return NOT_FOUND(res, err.message)
     }
@@ -633,6 +644,21 @@ function getMonitoringPakanLele (models, io) {
   }  
 }
 
+
+function postSandi (models, io) {
+  return async (req, res, next) => {
+		let { ph, tds } = req.body
+    try {
+			await models.SandiSensor.update({
+				ph, tds
+			}, { where: { idSensor: 1 } })
+			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -646,4 +672,5 @@ module.exports = {
 	postSmartCooler,
 	postAlya,
 	getMonitoringPakanLele,
+	postSandi,
 }
