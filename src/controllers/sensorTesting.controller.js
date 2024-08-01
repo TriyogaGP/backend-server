@@ -644,11 +644,31 @@ function getMonitoringPakanLele (models, io) {
   }  
 }
 
-
 function postSandi (models, io) {
   return async (req, res, next) => {
 		let { ph, tds } = req.body
     try {
+			let date = new Date();
+			const data = await request({
+				url: `https://api.thingspeak.com/update.json`,
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				data: {
+					"api_key": "MT8R5F1YUH0ZME9W",
+					"created_at": date,
+					"field1": ph,
+					"field2": tds,
+					"field3": "",
+					"field4": "",
+					"field5": "",
+					"latitude": "",
+					"longitude": "",
+					"status": "Please check in!"
+				}
+			})
+
 			await models.SandiSensor.update({
 				ph, tds
 			}, { where: { idSensor: 1 } })
