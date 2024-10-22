@@ -18,6 +18,7 @@ dotenv.config();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 const swagger = require('./swagger')
+const WebSocket = require('ws');
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -149,6 +150,34 @@ try {
   //   userActiveCustomer.start();
 
   const PORT = process.env.PORT || 4400;
+  const WS_PORT = process.env.WS_PORT;
+
+  const wsServer = new WebSocket.Server({port: WS_PORT}, ()=> console.log(`WS Server is listening at ${WS_PORT}`));
+
+  let connectedClients = [];
+  wsServer.on('connection', (ws, req)=>{
+    console.log('Connected');
+    connectedClients.push(ws);
+
+    ws.on('message', data => {
+      connectedClients.forEach((ws,i)=>{
+        if(ws.readyState === ws.OPEN){
+          ws.send(data);
+        }else{
+          connectedClients.splice(i ,1);
+        }
+      })
+    });
+  });
+
+  // app.get('/client',(req,res)=>res.sendFile(path.resolve(__dirname, './views/client.html')));
+  app.get("/client", async (req, res) => {
+    res.render('client', {
+      ipaddress: process.env.IPADDRESS,
+      port: WS_PORT
+    })
+  });
+
   server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
   });
