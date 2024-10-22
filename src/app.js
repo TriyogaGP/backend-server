@@ -171,10 +171,20 @@ try {
   });
 
   // app.get('/client',(req,res)=>res.sendFile(path.resolve(__dirname, './views/client.html')));
+  app.get("/monitoring", async (req, res) => {
+    res.render('menu-monitoring')
+  });
   app.get("/client", async (req, res) => {
     res.render('client', {
       ipaddress: process.env.IPADDRESS,
       port: WS_PORT
+    })
+  });
+  app.get("/map", async (req, res) => {
+    const dataTitikPemantauan = await models.TitikPemantauan.findOne({ where:{ idTitik: 1 } });
+    res.render('map', {
+      lat: dataTitikPemantauan.latitude,
+      long: dataTitikPemantauan.longitude
     })
   });
 

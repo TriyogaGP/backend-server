@@ -679,6 +679,20 @@ function postSandi (models, io) {
   }  
 }
 
+function getTitikPemantauan (models, io) {
+  return async (req, res, next) => {
+		let { longitude, latitude } = req.query
+    try {
+			await models.TitikPemantauan.update({
+				longitude, latitude
+			}, { where: { idTitik: 1 } })
+			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -693,4 +707,5 @@ module.exports = {
 	postAlya,
 	getMonitoringPakanLele,
 	postSandi,
+	getTitikPemantauan,
 }

@@ -14,6 +14,7 @@ const {
   postAlya,
   getMonitoringPakanLele,
   postSandi,
+  getTitikPemantauan,
 } = require('../controllers/sensorTesting.controller')
 
 module.exports = (models, io) => {
@@ -45,6 +46,8 @@ module.exports = (models, io) => {
     .post(postSandi(models))
   route.route('/monitoring-lele')
     .get(getMonitoringPakanLele(models))
+  route.route('/titik-pemantauan')
+    .post(getTitikPemantauan(models))
 
   return route;
 }

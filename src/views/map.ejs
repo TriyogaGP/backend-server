@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="refresh" content="5">
+	<title>GEOLOCATION MAPS</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOHnZ3Xjz0KFuviil6i5c-qS-vnYT2sfI"></script>
+</head>
+<body>
+	<style>
+		body{
+			margin: 0;
+			padding: 0;
+			height: 100vh;
+		}
+		.container{
+			margin: 20px;
+		}
+		.row{
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		#map{
+			background: #594491;
+			border: #000 solid 3px;
+			position: relative;
+			flex: 1;
+			max-width: 800px;
+			height: 500px;
+			margin: 10px;
+			border-radius: 10px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-decoration: none;
+			color: black;
+		}
+	</style>
+  <h1 align="center">GEOLOCATION MAPS</h1>
+	<div class="container">
+		<div class="row">
+			<div id="map"></div>
+		</div>
+	</div>
+	<input type="hidden" id="lat" value="<%= lat %>" />
+	<input type="hidden" id="long" value="<%= long %>" />
+	<script type="text/javascript">
+		// Define the coordinates for the center of the map
+		const lat = document.getElementById('lat').value
+		const long = document.getElementById('long').value
+		
+		var center = { lat: parseFloat(lat), lng: parseFloat(long) }; 
+
+		// Create a new map instance
+		var map = new google.maps.Map(document.getElementById('map'), {
+			center: center,
+			zoom: 18, // Adjust the zoom level as needed
+		});
+		
+		// Add a marker to the map
+		var marker = new google.maps.Marker({
+			position: center,
+			map: map,
+			title: 'Lokasi anda' // Optional, display a tooltip on the marker
+		});
+	</script>
+</body>
+</html>
