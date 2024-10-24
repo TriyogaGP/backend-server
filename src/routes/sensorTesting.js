@@ -47,7 +47,7 @@ module.exports = (models, io) => {
   route.route('/monitoring-lele')
     .get(getMonitoringPakanLele(models))
   route.route('/titik-pemantauan')
-    .post(getTitikPemantauan(models))
+    .get(getTitikPemantauan(models))
 
   return route;
 }
