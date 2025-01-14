@@ -15,6 +15,8 @@ const {
   getMonitoringPakanLele,
   postSandi,
   getTitikPemantauan,
+  postCheckDaffa,
+  getDaffa,
 } = require('../controllers/sensorTesting.controller')
 
 module.exports = (models, io) => {
@@ -48,6 +50,10 @@ module.exports = (models, io) => {
     .get(getMonitoringPakanLele(models))
   route.route('/titik-pemantauan')
     .post(getTitikPemantauan(models))
+  route.route('/check-daffa')
+    .post(postCheckDaffa(models))
+  route.route('/get-daffa')
+    .post(getDaffa(models))
 
   return route;
 }

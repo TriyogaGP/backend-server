@@ -532,7 +532,7 @@ function postWimon (models, io) {
   }  
 }
 
-function postSmartCooler (models, io) {
+function postSmartCooler (models) {
   return async (req, res, next) => {
 		let { suhu, humidity, tegangan } = req.body
     try {
@@ -566,7 +566,7 @@ function postSmartCooler (models, io) {
   }  
 }
 
-function postAlya (models, io) {
+function postAlya (models) {
   return async (req, res, next) => {
 		let { suhu, ph, tds } = req.body
     try {
@@ -612,7 +612,7 @@ function postAlya (models, io) {
   }  
 }
 
-function getMonitoringPakanLele (models, io) {
+function getMonitoringPakanLele (models) {
   return async (req, res, next) => {
 		let { suhu, ph, turbidity } = req.query
     try {
@@ -644,7 +644,7 @@ function getMonitoringPakanLele (models, io) {
   }  
 }
 
-function postSandi (models, io) {
+function postSandi (models) {
   return async (req, res, next) => {
 		let { ph, tds } = req.body
     try {
@@ -679,7 +679,7 @@ function postSandi (models, io) {
   }  
 }
 
-function getTitikPemantauan (models, io) {
+function getTitikPemantauan (models) {
   return async (req, res, next) => {
 		let { longitude, latitude } = req.body
     try {
@@ -687,6 +687,38 @@ function getTitikPemantauan (models, io) {
 				longitude, latitude
 			}, { where: { idTitik: 1 } })
 			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
+function postCheckDaffa (models) {
+  return async (req, res, next) => {
+		let { ir, wlc } = req.body
+    try {
+			const prediksi = ir == 0 ? 0 : (20*500) / (ir*60);
+			await models.Daffa.update({
+				tetesan: ir, batas: wlc, prediksi
+			}, { where: { idSensor: 1 } })
+			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
+function getDaffa (models) {
+	return async (req, res, next) => {
+		let { proses = 'data' } = req.body
+    try {
+			if(proses == 'data'){
+				const dataInfus = await models.Daffa.findOne({ where:{ idSensor: 1 } });
+				return OK(res, dataInfus)
+			}else if(proses == 'alert'){
+				const dataInfus = await models.Daffa.findOne({ where:{ idSensor: 1 } });
+				return OK(res, dataInfus.batas)
+			}
     } catch (err) {
 			return NOT_FOUND(res, err.message)
     }
@@ -708,4 +740,6 @@ module.exports = {
 	getMonitoringPakanLele,
 	postSandi,
 	getTitikPemantauan,
+	postCheckDaffa,
+	getDaffa,
 }

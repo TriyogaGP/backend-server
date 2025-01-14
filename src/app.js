@@ -68,6 +68,35 @@ try {
     })
   });
 
+  app.get("/monitoring", async (req, res) => {
+    res.render('menu-monitoring')
+  });
+  app.get("/client", async (req, res) => {
+    res.render('client', {
+      ipaddress: process.env.IPADDRESS,
+      port: WS_PORT
+    })
+  });
+  app.get("/map", async (req, res) => {
+    const dataTitikPemantauan = await models.TitikPemantauan.findOne({ where:{ idTitik: 1 } });
+    res.render('map', {
+      lat: dataTitikPemantauan.latitude,
+      long: dataTitikPemantauan.longitude
+    })
+  });
+
+  //daffa
+  app.get("/monitoring-infus", async (req, res) => {
+    const dataInfus = await models.Daffa.findOne({ where:{ idSensor: 1 } });
+    res.render('infus', {
+      data: {
+        tetesan: dataInfus.tetesan,
+        batas: dataInfus.batas,
+        prediksi: dataInfus.prediksi
+      }
+    })
+  });
+
   //api
   app.use('/api/v1/sensor-testing', sensorTesting(models, io));
   
@@ -171,22 +200,6 @@ try {
   });
 
   // app.get('/client',(req,res)=>res.sendFile(path.resolve(__dirname, './views/client.html')));
-  app.get("/monitoring", async (req, res) => {
-    res.render('menu-monitoring')
-  });
-  app.get("/client", async (req, res) => {
-    res.render('client', {
-      ipaddress: process.env.IPADDRESS,
-      port: WS_PORT
-    })
-  });
-  app.get("/map", async (req, res) => {
-    const dataTitikPemantauan = await models.TitikPemantauan.findOne({ where:{ idTitik: 1 } });
-    res.render('map', {
-      lat: dataTitikPemantauan.latitude,
-      long: dataTitikPemantauan.longitude
-    })
-  });
 
   server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
