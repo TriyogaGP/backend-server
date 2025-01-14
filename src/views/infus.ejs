@@ -10,41 +10,70 @@
 </head>
 <body>
 	<style>
-		.container {
-			display: flex;
+		body{
+			margin: 0;
+			padding: 0;
+			height: 100vh;
 		}
-		.box {
+		.container{
+			margin: 20px;
+		}
+		.row{
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		.card-01{
+			background: #594491;
+			position: relative;
 			flex: 1;
-			margin: 15px;
-			padding: 30px;
-			border: 3px solid black;
+			max-width: 300px;
+			height: 200px;
+			margin: 10px;
 			border-radius: 5px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-decoration: none;
+			color: black;
 		}
 		.titlebox{
-			font-size: 18pt;
+			font-size: 14pt;
 			text-align: center;
 			font-weight: bold;
+			color: white;
 		}
 		.isibox{
 			font-size: 14pt;
 			text-align: center;
 			font-weight: bold;
-			margin-top: 20px;
+			margin-top: 50px;
+			color: white;
+		}
+		@media (max-width:800px){
+			.card-01{
+				flex: 100%;
+				max-width: 600px;
+			}
 		}
 	</style>
   <h1 align="center">MONITORING INFUS</h1>
 	<div class="container">
-		<div class="box" style="background-color: blue;">
-			<div class="titlebox" style="color: white;">Tetesan</div>
-			<div class="isibox" style="color: white;"><%= data.tetesan %> tetes/menit</div>
-		</div>
-		<div class="box" style="background-color: green;">
-			<div class="titlebox" style="color: white;">Prediksi (jam)</div>
-			<div class="isibox" style="color: white;"><%= data.prediksi %> jam</div>
-		</div>
-		<div class="box" style="background-color: yellow;">
-			<div class="titlebox" style="color: black;">Kondisi Wadah</div>
-			<div class="isibox" style="color: black;"><% if(data.batas == 1) { %> Wadah Sudah Hampir Habis <%}else{%> Wadah Masih Tersedia <% } %></div>
+		<div class="row">
+			<div class="card-01">
+				<div class="titlebox">TETESAN INFUS</div>
+				<div class="isibox"><%= data.tetesan %> tetes/menit</div>
+			</div>
+			<div class="card-01">
+				<div class="titlebox">PREDIKSI (Jam)</div>
+				<div class="isibox"><%= data.prediksi %> jam</div>
+			</div>
+			<div class="card-01">
+				<div class="titlebox">KONDISI WADAH</div>
+				<div class="isibox"><% if(data.batas == 1) { %> Wadah Sudah Hampir Habis <%}else{%> Wadah Masih Tersedia <% } %></div>
+			</div>
 		</div>
 	</div>
 </body>
