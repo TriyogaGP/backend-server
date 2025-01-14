@@ -52,7 +52,7 @@ module.exports = (models, io) => {
   route.route('/titik-pemantauan')
     .post(getTitikPemantauan(models))
   route.route('/check-daffa')
-    .post(postCheckDaffa(models))
+    .post(postCheckDaffa(models, io))
   route.route('/get-daffa')
     .post(getDaffa(models))
   route.route('/get-daffa-2')

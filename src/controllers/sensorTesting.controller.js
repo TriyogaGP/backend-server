@@ -693,7 +693,7 @@ function getTitikPemantauan (models) {
   }  
 }
 
-function postCheckDaffa (models) {
+function postCheckDaffa (models, io) {
   return async (req, res, next) => {
 		let { ir, wlc } = req.body
     try {
@@ -701,6 +701,9 @@ function postCheckDaffa (models) {
 			await models.Daffa.update({
 				tetesan: ir, batas: wlc, prediksi
 			}, { where: { idSensor: 1 } })
+
+			const dataInfus = await models.Daffa.findOne({ where:{ idSensor: 1 } });
+			io.emit("monitoringinfus", dataInfus);
 			return OK(res)
     } catch (err) {
 			return NOT_FOUND(res, err.message)
