@@ -17,6 +17,7 @@ const {
   getTitikPemantauan,
   postCheckDaffa,
   getDaffa,
+  getDaffa2,
 } = require('../controllers/sensorTesting.controller')
 
 module.exports = (models, io) => {
@@ -54,6 +55,8 @@ module.exports = (models, io) => {
     .post(postCheckDaffa(models))
   route.route('/get-daffa')
     .post(getDaffa(models))
+  route.route('/get-daffa-2')
+    .get(getDaffa2(models))
 
   return route;
 }

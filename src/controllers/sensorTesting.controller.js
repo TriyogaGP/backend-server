@@ -725,6 +725,17 @@ function getDaffa (models) {
   }  
 }
 
+function getDaffa2 (models) {
+	return async (req, res, next) => {
+    try {
+			const dataInfus = await models.Daffa.findOne({ where:{ idSensor: 1 } });
+			return OK(res, dataInfus)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -742,4 +753,5 @@ module.exports = {
 	getTitikPemantauan,
 	postCheckDaffa,
 	getDaffa,
+	getDaffa2,
 }
