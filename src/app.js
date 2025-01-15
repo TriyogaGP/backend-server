@@ -114,6 +114,11 @@ try {
       console.log(msg);
     });
 
+    socket.on("monitoringinfus", (data) => {
+      console.log(data);
+    });
+
+
     socket.on('message', (message) => {
       console.log(`message from ${socket.id} : ${message}`);
     })
