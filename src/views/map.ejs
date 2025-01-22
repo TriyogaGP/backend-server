@@ -8,9 +8,8 @@
 	<title>GEOLOCATION MAPS</title>
 	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOHnZ3Xjz0KFuviil6i5c-qS-vnYT2sfI"></script> -->
-	<link rel="stylesheet" href="https://write.corbpie.com/wp-content/litespeed/localres/aHR0cHM6Ly9jZG5qcy5jbG91ZGZsYXJlLmNvbS8=ajax/libs/leaflet/1.6.0/leaflet.css"/>
-    	<script src="https://write.corbpie.com/wp-content/litespeed/localres/aHR0cHM6Ly9jZG5qcy5jbG91ZGZsYXJlLmNvbS8=ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    	<script src="https://write.corbpie.com/wp-content/litespeed/localres/aHR0cHM6Ly9jZG5qcy5jbG91ZGZsYXJlLmNvbS8=ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
 	<style>
@@ -72,18 +71,10 @@
 		// 	map: map,
 		// 	title: 'Lokasi anda' // Optional, display a tooltip on the marker
 		// });
-		$(function() {
-		    setLocation = [ lat , long ];
-		    var map = L.map('MapBox').setView(setLocation, 14);
-		    L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		        attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-		    }).addTo(map);
-		    map.attributionControl.setPrefix(false);
-		    var marker = new L.marker(setLocation, {
-		        draggable: false
-		    });
-		    map.addLayer(marker);
-		})
+		var map = L.map('MapBox', {
+		    center: [51.505, -0.09],
+		    zoom: 13
+		});
 	</script>
 </body>
 </html>
