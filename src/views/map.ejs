@@ -47,7 +47,7 @@
   <h1 align="center">GEOLOCATION MAPS</h1>
 	<div class="container">
 		<div class="row">
-			<div id="MapBox"></div>
+			<div id="map"></div>
 		</div>
 	</div>
 	<input type="hidden" id="lat" value="<%= lat %>" />
@@ -71,7 +71,7 @@
 		// 	map: map,
 		// 	title: 'Lokasi anda' // Optional, display a tooltip on the marker
 		// });
-		var map = L.map('MapBox', {
+		var map = L.map('map', {
 		    center: [51.505, -0.09],
 		    zoom: 13
 		});
