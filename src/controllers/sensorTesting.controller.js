@@ -769,7 +769,7 @@ function getAkuariumIlham (models, io) {
   return async (req, res, next) => {
 		let { tombol, kondisi } = req.params
     try {
-			await models.Daffa.update(tombol == 'isi' ? {isiAir: kondisi} : {kurasAir: kondisi}, { where: { idSensor: 1 } })
+			await models.Ilham.update(tombol == 'isi' ? {isiAir: kondisi} : {kurasAir: kondisi}, { where: { idSensor: 1 } })
 			return OK(res)
     } catch (err) {
 			return NOT_FOUND(res, err.message)
