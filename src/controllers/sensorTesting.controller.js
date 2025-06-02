@@ -767,8 +767,8 @@ function postCheckAkuariumIlham (models, io) {
 
 function getAkuariumIlham (models, io) {
   return async (req, res, next) => {
-		let { tombol, kondisi } = req.params
-    try {
+		let { tombol, kondisi } = req.query
+    try {			
 			await models.Ilham.update(tombol == 'isi' ? {isiAir: kondisi} : {kurasAir: kondisi}, { where: { idSensor: 1 } })
 			return OK(res)
     } catch (err) {
