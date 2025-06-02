@@ -739,6 +739,44 @@ function getDaffa2 (models) {
   }  
 }
 
+function postCheckAkuariumIlham (models, io) {
+  return async (req, res, next) => {
+		let { suhu, ph, ntu, amoniak } = req.body
+    try {
+			let kondisiSuhu = 0, kondisiPh = 0, kondisiNtu = 0, kondisiAmoniak = 0
+			const dataTombolAir = await models.Ilham.findOne({ where:{ idSensor: 1 } });
+			
+			//logika
+			if(suhu >= 23.00 && suhu <= 25.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
+			if(ph >= 6.5 && ph <= 7.0) { kondisiPh = 0; }else{ kondisiPh = 1; }
+			if(ntu > 25) { kondisiNtu = 0; }else{ kondisiNtu = 1; }
+			if(amoniak > 0.8) { kondisiAmoniak = 0; }else{ kondisiAmoniak = 1; }
+
+			io.emit("monitoringsensorakuarium", [
+				{ nilai: suhu, kondisi: kondisiSuhu },
+				{ nilai: ph, kondisi: kondisiPh },
+				{ nilai: ntu, kondisi: kondisiNtu },
+				{ nilai: amoniak, kondisi: kondisiAmoniak },
+			]);
+			return OK(res, dataTombolAir)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
+function getAkuariumIlham (models, io) {
+  return async (req, res, next) => {
+		let { tombol, kondisi } = req.params
+    try {
+			await models.Daffa.update(tombol == 'isi' ? {isiAir: kondisi} : {kurasAir: kondisi}, { where: { idSensor: 1 } })
+			return OK(res)
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -757,4 +795,6 @@ module.exports = {
 	postCheckDaffa,
 	getDaffa,
 	getDaffa2,
+	postCheckAkuariumIlham,
+	getAkuariumIlham,
 }

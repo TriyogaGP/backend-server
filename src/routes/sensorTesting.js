@@ -18,6 +18,8 @@ const {
   postCheckDaffa,
   getDaffa,
   getDaffa2,
+  postCheckAkuariumIlham,
+  getAkuariumIlham,
 } = require('../controllers/sensorTesting.controller')
 
 module.exports = (models, io) => {
@@ -57,6 +59,10 @@ module.exports = (models, io) => {
     .post(getDaffa(models))
   route.route('/get-daffa-2')
     .get(getDaffa2(models))
+  route.route('/check-akuarium-ilham')
+    .post(postCheckAkuariumIlham(models, io))
+  route.route('/akuarium-ilham')
+    .get(getAkuariumIlham(models))
 
   return route;
 }

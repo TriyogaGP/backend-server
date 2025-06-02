@@ -97,6 +97,12 @@ try {
       console.log(msg);
     });
 
+    socket.on("tombol-akuarium", async (data) => {
+      await models.Ilham.update({
+				isiAir: data.tombol1 , kurasAir: data.tombol1
+			}, { where: { idSensor: 1 } })
+    });
+
     socket.on('message', (message) => {
       console.log(`message from ${socket.id} : ${message}`);
     })
