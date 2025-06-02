@@ -749,8 +749,8 @@ function postCheckAkuariumIlham (models, io) {
 			//logika
 			if(suhu >= 23.00 && suhu <= 25.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
 			if(ph >= 6.5 && ph <= 7.0) { kondisiPh = 0; }else{ kondisiPh = 1; }
-			if(ntu > 25) { kondisiNtu = 0; }else{ kondisiNtu = 1; }
-			if(amoniak > 0.8) { kondisiAmoniak = 0; }else{ kondisiAmoniak = 1; }
+			if(ntu <= 25) { kondisiNtu = 0; }else{ kondisiNtu = 1; }
+			if(amoniak <= 0.8) { kondisiAmoniak = 0; }else{ kondisiAmoniak = 1; }
 
 			io.emit("monitoringsensorakuarium", [
 				{ nilai: suhu, kondisi: kondisiSuhu },
