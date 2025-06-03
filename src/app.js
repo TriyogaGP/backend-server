@@ -98,8 +98,8 @@ try {
     });
 
     socket.on("tombol-akuarium", async (data) => {
-      await models.Ilham.update({
-				isiAir: data.tombol1 , kurasAir: data.tombol1
+      await models.Ilham.update(data.type == "isi" ? {
+				isiAir: data.tombol } : { kurasAir: data.tombol
 			}, { where: { idSensor: 1 } })
     });
 

@@ -745,7 +745,8 @@ function postCheckAkuariumIlham (models, io) {
     try {
 			let kondisiSuhu = 0, kondisiPh = 0, kondisiNtu = 0, kondisiAmoniak = 0
 			const dataTombolAir = await models.Ilham.findOne({ where:{ idSensor: 1 } });
-			
+			const { isiAir, kurasAir } = dataTombolAir
+
 			//logika
 			if(suhu >= 23.00 && suhu <= 25.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
 			if(ph >= 6.5 && ph <= 7.0) { kondisiPh = 0; }else{ kondisiPh = 1; }
@@ -758,7 +759,10 @@ function postCheckAkuariumIlham (models, io) {
 				{ nilai: ntu, kondisi: kondisiNtu },
 				{ nilai: amoniak, kondisi: kondisiAmoniak },
 			]);
-			return OK(res, dataTombolAir)
+			io.emit("controlingakuarium", {
+				isiAir, kurasAir
+			});
+			return OK(res, { isiAir, kurasAir })
     } catch (err) {
 			return NOT_FOUND(res, err.message)
     }
