@@ -741,19 +741,17 @@ function getDaffa2 (models) {
 
 function postCheckAkuariumIlham (models, io) {
   return async (req, res, next) => {
-		let { suhu, ph, ntu, amoniak, kondisi1, kondisi2 } = req.body
+		let { suhu, ph, ntu, amoniak } = req.body
     try {
 			let kondisiSuhu = 0, kondisiPh = 0, kondisiNtu = 0, kondisiAmoniak = 0
-			await models.Ilham.update({ isiAir: kondisi1, kurasAir: kondisi2 }, { where: { idSensor: 1 } })
-			
+			const dataTombolAir = await models.Ilham.findOne({ where:{ idSensor: 1 } });
+			const { isiAir, kurasAir } = dataTombolAir
+
 			//logika
 			if(suhu >= 23.00 && suhu <= 25.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
 			if(ph >= 6.5 && ph <= 7.0) { kondisiPh = 0; }else{ kondisiPh = 1; }
 			if(ntu <= 25) { kondisiNtu = 0; }else{ kondisiNtu = 1; }
 			if(amoniak <= 0.8) { kondisiAmoniak = 0; }else{ kondisiAmoniak = 1; }
-		
-			const dataTombolAir = await models.Ilham.findOne({ where:{ idSensor: 1 } });
-			const { isiAir, kurasAir } = dataTombolAir
 
 			io.emit("monitoringsensorakuarium", [
 				{ nilai: suhu, kondisi: kondisiSuhu },
