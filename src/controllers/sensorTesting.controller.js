@@ -744,7 +744,6 @@ function postCheckAkuariumIlham (models, io) {
 		let { suhu, ph, ntu, amoniak, kondisi1, kondisi2 } = req.body
     try {
 			let kondisiSuhu = 0, kondisiPh = 0, kondisiNtu = 0, kondisiAmoniak = 0
-			await models.Ilham.update({ isiAir: kondisi1, kurasAir: kondisi2 }, { where: { idSensor: 1 } })
 			
 			//logika
 			if(suhu >= 23.00 && suhu <= 25.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
