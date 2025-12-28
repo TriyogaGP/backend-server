@@ -147,6 +147,21 @@ function convertDateTime2(str) {
 	return datetime
 }
 
+function convertTime(str) {
+	let time = new Date(str),
+	jam = ("0" + time.getHours()).slice(-2),
+	menit = ("0" + time.getMinutes()).slice(-2),
+	detik = ("0" + time.getSeconds()).slice(-2);
+	const valueConvertTime = [jam, menit, detik].join(":");
+
+	return valueConvertTime
+}
+
+function timeToSecond(timeStr) {
+  const [h, m, s] = timeStr.split(':').map(Number);
+  return h * 3600 + m * 60 + s;
+}
+
 function convertDateGabung(str) {
 	let date = new Date(str),
 	mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -288,6 +303,8 @@ module.exports = {
 	convertDate3,
 	convertDateTime,
 	convertDateTime2,
+	convertTime,
+	timeToSecond,
 	convertDateGabung,
 	bulanValues,
 	uppercaseLetterFirst,

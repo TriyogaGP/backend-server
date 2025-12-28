@@ -8,6 +8,8 @@ const {
 	encrypt,
 	decrypt,
 	buildMysqlResponseWithPagination,
+	convertTime,
+	timeToSecond,
 } = require('../utils/helper.utils');
 const haversine = require("haversine-distance");
 const { Op } = require('sequelize')
@@ -782,6 +784,52 @@ function getAkuariumIlham (models, io) {
   }  
 }
 
+function getWisnu () {
+	return async (req, res, next) => {
+		let { suhu, humidity, lux } = req.body
+    try {
+			const now = new Date();
+			// now.setHours(12, 0, 0); // jam 12 siang
+			const start = new Date();
+			start.setHours(18, 0, 0);
+			const end = new Date();
+			end.setHours(6, 0, 0);
+			const data = await request({
+				url: `https://api.thingspeak.com/update.json`,
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				data: {
+					"api_key": "CDQTWYOXIOQ1RIU9",
+					"created_at": now,
+					"field1": suhu,
+					"field2": humidity,
+					"field3": lux,
+					"field4": "",
+					"field5": "",
+					"latitude": "",
+					"longitude": "",
+					"status": "Please check in!"
+				}
+			})
+			let status = 0;
+			if (now >= start || now <= end) {
+				status = 1; // malam
+			} else {
+				status = 0; // siang
+			}
+
+			return OK(res, {
+				waktu: convertTime(now),
+				status
+			})
+    } catch (err) {
+			return NOT_FOUND(res, err.message)
+    }
+  }  
+}
+
 module.exports = {
 	getServer,
 	getServerAlarm,
@@ -802,4 +850,5 @@ module.exports = {
 	getDaffa2,
 	postCheckAkuariumIlham,
 	getAkuariumIlham,
+	getWisnu,
 }
