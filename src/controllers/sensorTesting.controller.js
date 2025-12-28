@@ -748,8 +748,8 @@ function postCheckAkuariumIlham (models, io) {
 			let kondisiSuhu = 0, kondisiPh = 0, kondisiNtu = 0, kondisiAmoniak = 0
 			
 			//logika
-			if(suhu >= 23.00 && suhu <= 25.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
-			if(ph >= 6.5 && ph <= 7.0) { kondisiPh = 0; }else{ kondisiPh = 1; }
+			if(suhu >= 20.00 && suhu <= 26.00) { kondisiSuhu = 0; }else{ kondisiSuhu = 1; }
+			if(ph >= 6.5 && ph <= 8.0) { kondisiPh = 0; }else{ kondisiPh = 1; }
 			if(ntu <= 25) { kondisiNtu = 0; }else{ kondisiNtu = 1; }
 			if(amoniak <= 0.8) { kondisiAmoniak = 0; }else{ kondisiAmoniak = 1; }
 		
